@@ -39,7 +39,7 @@ public class TelaCadastroEdicaoUsuario extends JDialog {
         txtLogin = new JTextField();
         txtSenha = new JPasswordField();
         txtConfirmaSenha = new JPasswordField();
-        cmbTipo = new JComboBox<>(new String[]{"Admin","Comum"});
+        cmbTipo = new JComboBox<>(new String[]{"Administrador","Usuário comum"});
         chkIA = new JCheckBox("IA Responsável");
         chkCyber = new JCheckBox("Cibersegurança");
         chkEtica = new JCheckBox("Privacidade & Ética Digital");

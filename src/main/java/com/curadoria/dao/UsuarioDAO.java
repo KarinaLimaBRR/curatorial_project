@@ -38,6 +38,31 @@ public class UsuarioDAO {
         return null;
     }
 
+    public Usuario buscarPorId(int idUsuario) {
+        String sql = "SELECT idUsuario, nome, idade, login, tipo, status, senha, interesses FROM usuario WHERE idUsuario = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setInt(1, idUsuario);
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("idUsuario"));
+                    u.setNome(rs.getString("nome"));
+                    u.setIdade(rs.getInt("idade"));
+                    u.setLogin(rs.getString("login"));
+                    u.setTipo(rs.getString("tipo"));
+                    u.setStatus(rs.getBoolean("status"));
+                    u.setSenha(rs.getString("senha")); // Mantém o hash da senha
+                    u.setInteresses(rs.getString("interesses"));
+                    return u;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void cadastrar(Usuario usuario) {
         String sql = "INSERT INTO usuario (nome, idade, login, senha, tipo, status, interesses) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();

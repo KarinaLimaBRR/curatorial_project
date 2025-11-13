@@ -65,7 +65,7 @@ public class TelaLogin extends JFrame implements ActionListener {
 
         if (usuario != null) {
             String tipo = usuario.getTipo() != null ? usuario.getTipo().toLowerCase() : "";
-            if (tipo.contains("admin")) {
+            if (tipo.contains("administrador") || tipo.contains("admin")) {
                 new TelaAdmin(usuario).setVisible(true);
             } else {
                 new TelaComum(usuario).setVisible(true);

@@ -1,1 +1,11 @@
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/dao/CategoriaDAO.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/dao/RecursoDAO.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/dao/UsuarioDAO.java
 /Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/db/ConnectionFactory.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/model/Categoria.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/model/Recurso.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/model/Usuario.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/view/TelaAdmin.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/view/TelaCadastroEdicaoUsuario.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/view/TelaComum.java
+/Users/karinalima/Downloads/curadoria-db/src/main/java/com/curadoria/view/TelaLogin.java
