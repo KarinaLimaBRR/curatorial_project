@@ -1,0 +1,67 @@
+@startuml DER - Diagrama Entidade-Relacionamento
+
+!define ENTITY class
+!define PK <<PK>>
+!define FK <<FK>>
+!define NOTNULL <<NOT NULL>>
+
+ENTITY Usuario {
+    PK idUsuario : INT
+    --
+    NOTNULL nome : VARCHAR(100)
+    NOTNULL idade : INT
+    NOTNULL login : VARCHAR(50) <<UNIQUE>>
+    NOTNULL senha : VARCHAR(255)
+    NOTNULL tipo : VARCHAR(50)
+    status : BOOLEAN <<DEFAULT TRUE>>
+    interesses : VARCHAR(255)
+}
+
+ENTITY Categoria {
+    PK idCategoria : INT
+    --
+    NOTNULL nome : VARCHAR(100) <<UNIQUE>>
+    descricao : VARCHAR(255)
+}
+
+ENTITY Recurso {
+    PK idRecurso : INT
+    --
+    NOTNULL titulo : VARCHAR(255)
+    NOTNULL autor : VARCHAR(100)
+    NOTNULL idCategoria : INT <<FK>>
+    NOTNULL idUsuario : INT <<FK>>
+    dataCadastro : TIMESTAMP <<DEFAULT CURRENT_TIMESTAMP>>
+}
+
+' Relacionamentos
+Usuario ||--o{ Recurso : "cadastra"
+Categoria ||--o{ Recurso : "classifica"
+
+note right of Usuario
+  **Tipos de Usuário:**
+  - Administrador
+  - Usuário comum
+  
+  **Validações:**
+  - idade > 0
+  - login único
+  - interesses: até 2 categorias
+end note
+
+note right of Categoria
+  **Categorias Fixas:**
+  1. IA Responsável
+  2. Cibersegurança
+  3. Privacidade & Ética Digital
+end note
+
+note right of Recurso
+  **Regras:**
+  - Ordenação: alfabética por título
+  - Um usuário pode cadastrar vários recursos
+  - Um recurso pertence a uma categoria
+end note
+
+@enduml
+

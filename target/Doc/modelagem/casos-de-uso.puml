@@ -1,0 +1,60 @@
+@startuml Casos de Uso - Sistema de Curadoria
+
+!define RECTANGLE class
+
+left to right direction
+
+actor "Usuário\nAdministrador" as Admin
+actor "Usuário\nComum" as Comum
+actor "Sistema" as Sistema
+
+rectangle "Sistema de Curadoria" {
+    usecase UC01 as "UC01: Realizar Login"
+    usecase UC02 as "UC02: Cadastrar Usuário"
+    usecase UC03 as "UC03: Editar Usuário"
+    usecase UC04 as "UC05: Inativar Usuário"
+    usecase UC05 as "UC05: Listar Usuários"
+    usecase UC06 as "UC06: Cadastrar Recurso"
+    usecase UC07 as "UC07: Visualizar Recursos\n(Ordenados Alfabeticamente)"
+    usecase UC08 as "UC08: Gerenciar Categorias"
+}
+
+' Relacionamentos Administrador
+Admin --> UC01 : <<include>>
+Admin --> UC02
+Admin --> UC03
+Admin --> UC04
+Admin --> UC05
+Admin --> UC08
+
+' Relacionamentos Usuário Comum
+Comum --> UC01 : <<include>>
+Comum --> UC06
+Comum --> UC07
+
+' Relacionamentos de inclusão/extensão
+UC02 ..> UC08 : <<extend>>
+UC06 ..> UC08 : <<extend>>
+
+note right of UC01
+  Autenticação obrigatória
+  para todas as funcionalidades
+end note
+
+note right of UC02
+  Campos: Nome, Idade, Login,
+  Senha, Tipo, Interesses (até 2)
+end note
+
+note right of UC06
+  Campos: Título, Autor,
+  Categoria
+end note
+
+note right of UC07
+  Ordenação alfabética
+  por título
+end note
+
+@enduml
+

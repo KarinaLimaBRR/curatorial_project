@@ -1,0 +1,114 @@
+@startuml Diagrama de Sequência - Login e Cadastro de Recurso
+
+actor Usuario as user
+participant "TelaLogin" as login
+participant "UsuarioDAO" as dao
+participant "ConnectionFactory" as conn
+database "MySQL" as db
+participant "TelaComum" as comum
+participant "RecursoDAO" as recursoDAO
+participant "CategoriaDAO" as catDAO
+
+== Caso de Uso: Realizar Login ==
+
+user -> login: Inserir login e senha
+user -> login: Clicar em "Entrar"
+activate login
+
+login -> dao: buscarPorLogin(login, senha)
+activate dao
+
+dao -> conn: getConnection()
+activate conn
+conn -> db: Conectar ao banco
+db --> conn: Conexão estabelecida
+deactivate conn
+
+dao -> db: SELECT usuario WHERE login = ?
+db --> dao: ResultSet com dados do usuário
+
+dao -> dao: Verificar senha com BCrypt
+alt Senha correta e usuário ativo
+    db --> dao: Dados do usuário
+    dao --> login: Usuario objeto
+    deactivate dao
+    
+    alt Tipo = Administrador
+        login -> login: new TelaAdmin(usuario)
+        login -> user: Exibir TelaAdmin
+    else Tipo = Usuário comum
+        login -> login: new TelaComum(usuario)
+        login -> user: Exibir TelaComum
+    end
+else Senha incorreta ou usuário inativo
+    dao --> login: null
+    deactivate dao
+    login -> user: Exibir mensagem de erro
+end
+
+deactivate login
+
+== Caso de Uso: Cadastrar Recurso (Usuário Comum) ==
+
+user -> comum: Preencher dados do recurso
+user -> comum: Clicar em "Cadastrar"
+activate comum
+
+comum -> comum: Validar campos (título, autor, categoria)
+
+alt Campos válidos
+    comum -> recursoDAO: cadastrar(recurso)
+    activate recursoDAO
+    
+    recursoDAO -> conn: getConnection()
+    activate conn
+    conn -> db: Conectar ao banco
+    db --> conn: Conexão estabelecida
+    deactivate conn
+    
+    recursoDAO -> db: INSERT INTO recurso VALUES (...)
+    db --> recursoDAO: Recurso cadastrado
+    recursoDAO --> comum: Sucesso
+    deactivate recursoDAO
+    
+    comum -> comum: Limpar campos
+    comum -> comum: Atualizar tabela de recursos
+    comum -> user: Exibir mensagem de sucesso
+else Campos inválidos
+    comum -> user: Exibir mensagem de erro
+end
+
+deactivate comum
+
+== Caso de Uso: Visualizar Recursos ==
+
+user -> comum: Abrir aba "Listagem de Recursos"
+activate comum
+
+comum -> recursoDAO: listarTodos()
+activate recursoDAO
+
+recursoDAO -> conn: getConnection()
+activate conn
+conn -> db: Conectar ao banco
+db --> conn: Conexão estabelecida
+deactivate conn
+
+recursoDAO -> db: SELECT r.*, c.nome FROM recurso r\nLEFT JOIN categoria c\nORDER BY r.titulo ASC
+db --> recursoDAO: Lista de recursos ordenada
+
+recursoDAO -> catDAO: Buscar categorias (se necessário)
+activate catDAO
+catDAO --> recursoDAO: Lista de categorias
+deactivate catDAO
+
+recursoDAO --> comum: List<Recurso>
+deactivate recursoDAO
+
+comum -> comum: Preencher tabela com recursos
+comum -> user: Exibir recursos ordenados alfabeticamente
+
+deactivate comum
+
+@enduml
+
